@@ -31,9 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
-.gitattributes
 .java-version
 mvnw
 mvnw.cmd
-pom.xml
 .mvn/wrapper/maven-wrapper.properties
+
+logs/
