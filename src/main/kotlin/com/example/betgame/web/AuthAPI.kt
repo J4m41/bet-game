@@ -24,7 +24,7 @@ class AuthAPI @Autowired constructor(
      * @return the created user DTO
      */
     @PostMapping("/register")
-    fun register(@RequestBody @Valid user: UserRegisterDTO): UserReadDTO = authSrv.signup(user)
+    fun register(@Valid @RequestBody user: UserRegisterDTO): UserReadDTO = authSrv.signup(user)
 
     /**
      * API Endpoint to authenticate an existing user
@@ -33,6 +33,6 @@ class AuthAPI @Autowired constructor(
      * @return a DTO containing the JWT Bearer token
      */
     @PostMapping("/authenticate")
-    fun authenticate(@RequestBody @Valid user: UserLoginDTO): AuthTokenDTO = authSrv.authenticate(user)
+    fun authenticate(@Valid @RequestBody user: UserLoginDTO): AuthTokenDTO = authSrv.authenticate(user)
     
 }

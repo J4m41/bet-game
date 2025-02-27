@@ -10,14 +10,17 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.EnumType
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import jakarta.persistence.EntityListeners
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.repository.Temporal
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.util.UUID
 import java.util.Date
 
+@EntityListeners(AuditingEntityListener::class)
 @Entity
 data class BetUser (
     @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
@@ -38,6 +41,7 @@ data class BetUser (
     override fun getAuthorities(): Collection<GrantedAuthority> = emptyList()
 }
 
+@EntityListeners(AuditingEntityListener::class)
 @Entity
 data class BetTransaction(
     @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
@@ -46,6 +50,7 @@ data class BetTransaction(
     @Column(nullable = false) var betAmount: Long,
     @Column(nullable = false) var betNumber: Int,
     @Column(nullable = false) @Enumerated(EnumType.STRING) var betResult: BetResult,
-    @Column(nullable = false) var winAmount: Long = 0,
-    @ManyToOne(optional = false) var betUser: BetUser
+    @Column(nullable = false) var betResultNumber: Int,
+    @Column(nullable = false) var winAmount: Long,
+    @ManyToOne(optional = false) var betUser: BetUser? = null
 )

@@ -3,12 +3,20 @@ package com.example.betgame.web
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page
+import org.springframework.data.web.PageableDefault
 import com.example.betgame.data.BetTransactionDTO
+import com.example.betgame.data.BetTransactionCreateDTO
+import com.example.betgame.service.BetGameSrv
 import jakarta.validation.Valid
 
 @RestController
 @RequestMapping("/api/bets")
-class BetGameAPI {
+class BetGameAPI @Autowired constructor(
+    private val betGameSrv: BetGameSrv
+) {
 
     /**
      * API Endpoint to place a new bet for the currently authenticated user
@@ -17,9 +25,7 @@ class BetGameAPI {
      * @return a DTO with the result of the bet
      */
     @PostMapping
-    fun createBet(@RequestBody @Valid bet: BetTransactionDTO): ResponseEntity<BetTransactionDTO> {
-        return ResponseEntity(HttpStatus.CREATED)
-    }
+    fun createBet(@Valid @RequestBody bet: BetTransactionCreateDTO): BetTransactionDTO = betGameSrv.createBet(bet)
 
     /**
      * API Endpoint that returns the bets of the currently authenticated user
@@ -27,7 +33,5 @@ class BetGameAPI {
      * @return a list of DTO bets
      */
     @GetMapping
-    fun getBets(): ResponseEntity<List<BetTransactionDTO>> {
-        return ResponseEntity(HttpStatus.OK)
-    }
+    fun getBets(@PageableDefault(page = 0, size = 25) pageable: Pageable): Page<BetTransactionDTO> = betGameSrv.findAllBets(pageable)
 }

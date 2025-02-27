@@ -13,15 +13,15 @@ fun BetUser.toReadDTO(): UserReadDTO = UserReadDTO(
     walletBalance = this.walletBalance)
 
 data class UserRegisterDTO(
-    @NotBlank val username: String, 
-    @NotBlank val password: String, 
-    @NotBlank val firstName: String, 
-    @NotBlank val lastName: String
+    @field:NotBlank val username: String, 
+    @field:NotBlank val password: String, 
+    @field:NotBlank val firstName: String, 
+    @field:NotBlank val lastName: String
 )
 
 data class UserLoginDTO(
-    @NotBlank val username: String, 
-    @NotBlank val password: String
+    @field:NotBlank val username: String, 
+    @field:NotBlank val password: String
 )
 
 data class AuthTokenDTO(
@@ -36,8 +36,16 @@ data class ExceptionDTO(
 )
 
 data class BetTransactionDTO(
-    @Min(0) var betAmount: Long,
-    @Min(1) @Max(10) var betNumber: Int,
-    var betResult: BetResult?,
-    var winAmount: Long? = 0
+    var betAmount: Long,
+    var betNumber: Int,
+    var betResult: BetResult,
+    var betResultNumber: Int,
+    var winAmount: Long
+)
+
+fun BetTransaction.toDTO(): BetTransactionDTO = BetTransactionDTO(this.betAmount, this.betNumber, this.betResult, this.betResultNumber, this.winAmount)
+
+data class BetTransactionCreateDTO(
+    @field:Min(0) var betAmount: Long,
+    @field:Min(1) @field:Max(10) var betNumber: Int,
 )
