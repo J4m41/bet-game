@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.AuthenticationException
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -55,5 +56,9 @@ class GlobalExceptionHandler {
             errorDetails.addAll(errors)
         }
     }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleDataIntegrityViolationException(ex: DataIntegrityViolationException): ExceptionDTO = ExceptionDTO("DB_01", ex.message)
 
 }

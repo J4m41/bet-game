@@ -1,5 +1,6 @@
 package com.example.betgame.service
 
+import java.util.*
 import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
@@ -16,6 +17,9 @@ import com.example.betgame.data.BetUserRepository
 import com.example.betgame.data.MaxBetAmountExceededEx
 import com.example.betgame.data.BetResult
 import com.example.betgame.data.BetTransactionCreateDTO
+import com.example.betgame.data.BetUser
+import com.example.betgame.data.toReadDTO
+import com.example.betgame.data.UserReadDTO
 
 import com.example.betgame.utils.log
 import kotlin.random.Random
@@ -35,15 +39,16 @@ class BetGameSrv {
     }
 
     fun findAllBets(pageable: Pageable): Page<BetTransactionDTO> {
-        val authentication = SecurityContextHolder.getContext().authentication
-        log.info(authentication.toString())
-        var bets = betTransactionRepository.findAll().map { it -> it.toDTO() }
-        return PageImpl<BetTransactionDTO>(bets)
+        val principal = SecurityContextHolder.getContext().authentication.principal as BetUser
+        var userId: UUID = principal.id!!
+        var betsPage = betTransactionRepository.findAllByBetUserId(userId, pageable)
+        var betsDTOList = betsPage.content.map { it -> it.toDTO() }
+        return PageImpl<BetTransactionDTO>(betsDTOList, pageable, betsPage.totalElements)
     }
 
     fun createBet(bet: BetTransactionCreateDTO): BetTransactionDTO {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val user = userRepository.findByUsername(authentication.name)
+        val principal = SecurityContextHolder.getContext().authentication.principal as BetUser
+        val user = userRepository.findByUsername(principal.username)
         var balance = user.walletBalance
         var betResult: BetResult
         var winAmount: Long
@@ -73,4 +78,6 @@ class BetGameSrv {
 
         return betTransactionRepository.save(entity).toDTO()
     }
+
+    fun me(): UserReadDTO = (SecurityContextHolder.getContext().authentication.principal as BetUser).toReadDTO()
 }

@@ -1,6 +1,8 @@
 package com.example.betgame.data
 
 import java.util.UUID
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Page
 import org.springframework.data.querydsl.QuerydslPredicateExecutor
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer
 import org.springframework.data.repository.CrudRepository
@@ -17,6 +19,6 @@ interface BetUserRepository : CrudRepository<BetUser, UUID>, QuerydslPredicateEx
 @Repository
 interface BetTransactionRepository : CrudRepository<BetTransaction, UUID>, QuerydslPredicateExecutor<BetTransaction> {
 
-    fun findAllByBetUserId(betUserId: UUID): List<BetTransaction>
+    fun findAllByBetUserId(betUserId: UUID, pageable: Pageable): Page<BetTransaction>
 
 }
