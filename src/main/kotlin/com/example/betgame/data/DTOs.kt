@@ -46,6 +46,6 @@ data class BetTransactionDTO(
 fun BetTransaction.toDTO(): BetTransactionDTO = BetTransactionDTO(this.betAmount, this.betNumber, this.betResult, this.betResultNumber, this.winAmount)
 
 data class BetTransactionCreateDTO(
-    @field:Min(0) var betAmount: Long,
+    @field:Min(1) var betAmount: Long,
     @field:Min(1) @field:Max(10) var betNumber: Int,
 )

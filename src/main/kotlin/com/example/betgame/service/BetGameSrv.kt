@@ -50,34 +50,28 @@ class BetGameSrv {
         val principal = SecurityContextHolder.getContext().authentication.principal as BetUser
         val user = userRepository.findByUsername(principal.username)
         var balance = user.walletBalance
-        var betResult: BetResult
-        var winAmount: Long
         if (bet.betAmount > (balance - (bet.betAmount))) throw MaxBetAmountExceededEx("MBE_01", "Maximum bet amount exceeded")
         
-        val randomNumber = Random.nextInt(1, 11)  // Generates a number between 1 and 10 (inclusive)
-        
-        if (randomNumber < (bet.betNumber - 2) || randomNumber > (bet.betNumber + 2)) {
-            betResult = BetResult.LOST
-            winAmount = -bet.betAmount
-        } else if (randomNumber == (bet.betNumber - 2) || randomNumber == (bet.betNumber + 2)) {
-            betResult = BetResult.WIN
-            winAmount = bet.betAmount / 2
-        } else if (randomNumber == (bet.betNumber - 1) || randomNumber == (bet.betNumber + 1)) {
-            betResult = BetResult.WIN
-            winAmount = bet.betAmount * 5
-        } else {
-            betResult = BetResult.WIN
-            winAmount = bet.betAmount * 10
-        }
+        val randomNumber = Random.nextInt(1, 11)
+        val winAmount = calculateWinnings(bet.betNumber, randomNumber, bet.betAmount)
+        val betResult: BetResult = if (winAmount > 0) BetResult.WIN else BetResult.LOST
 
-        balance = balance + winAmount
-        user.walletBalance = balance
-
+        user.walletBalance += winAmount
         userRepository.save(user)
+
         var entity = BetTransaction(null, null, null, bet.betAmount, bet.betNumber, betResult, randomNumber, winAmount, user)
 
         return betTransactionRepository.save(entity).toDTO()
     }
 
     fun me(): UserReadDTO = (SecurityContextHolder.getContext().authentication.principal as BetUser).toReadDTO()
+
+    private fun calculateWinnings(bet: Int, generated: Int, betAmount: Long): Long {
+        return when (kotlin.math.abs(bet - generated)) {
+            0 -> betAmount * 10
+            1 -> betAmount * 5
+            2 -> betAmount / 2
+            else -> 0
+        }
+    }
 }
