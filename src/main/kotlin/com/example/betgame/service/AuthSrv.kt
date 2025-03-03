@@ -14,6 +14,7 @@ import com.example.betgame.data.toReadDTO
 import com.example.betgame.data.AuthTokenDTO
 import com.example.betgame.data.UserLoginDTO
 import com.example.betgame.service.JwtSrv
+import com.example.betgame.utils.Loggable
 
 @Service
 class AuthSrv {
@@ -28,11 +29,19 @@ class AuthSrv {
     @Autowired
     lateinit var jwtService: JwtSrv
 
+    /**
+     * Register a new user
+     */
+    @Loggable
     fun signup(newUserDTO: UserRegisterDTO): UserReadDTO {
         val user = BetUser(null, null, null, newUserDTO.username, passwordEncoder.encode(newUserDTO.password), newUserDTO.firstName, newUserDTO.lastName)
         return userRepository.save(user).toReadDTO()
     }
 
+    /**
+     * Authenticate a user
+     */
+    @Loggable
     fun authenticate(input: UserLoginDTO): AuthTokenDTO {
         authenticationManager.authenticate(
             UsernamePasswordAuthenticationToken(input.username, input.password)
@@ -41,6 +50,6 @@ class AuthSrv {
         val user = userRepository.findByUsername(input.username)
         val jwtToken = jwtService.generateToken(user)
 
-        return AuthTokenDTO(jwtToken, null)
+        return AuthTokenDTO(jwtToken)
     }
 }

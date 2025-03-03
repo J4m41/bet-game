@@ -22,7 +22,7 @@ import java.util.Date
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-data class BetUser (
+class BetUser (
     @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
     @CreatedBy var createdBy: String? = null,
     @CreatedDate @Temporal(TemporalType.TIMESTAMP) var createdDate: Date? = null,
@@ -30,7 +30,7 @@ data class BetUser (
     @Column(nullable = false) private var password: String,
     @Column(nullable = false) var firstName: String,
     @Column(nullable = false) var lastName: String,
-    @Column(nullable = false, columnDefinition = "BIGINT CHECK (\"wallet_balance\" > 0)") var walletBalance: Long = 1000,
+    @Column(nullable = false, columnDefinition = "BIGINT CHECK (\"wallet_balance\" > 0)") var walletBalance: Double = 1000.0,
     @OneToMany(mappedBy = "betUser") var betTransactions: MutableList<BetTransaction> = mutableListOf()
 ): UserDetails {
 
@@ -43,14 +43,14 @@ data class BetUser (
 
 @EntityListeners(AuditingEntityListener::class)
 @Entity
-data class BetTransaction(
+class BetTransaction(
     @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
     @CreatedBy var createdBy: String? = null,
     @CreatedDate @Temporal(TemporalType.TIMESTAMP) var createdDate: Date? = null,
-    @Column(nullable = false) var betAmount: Long,
+    @Column(nullable = false) var betAmount: Double,
     @Column(nullable = false) var betNumber: Int,
     @Column(nullable = false) @Enumerated(EnumType.STRING) var betResult: BetResult,
     @Column(nullable = false) var betResultNumber: Int,
-    @Column(nullable = false) var winAmount: Long,
+    @Column(nullable = false) var winAmount: Double,
     @ManyToOne(optional = false) var betUser: BetUser? = null
 )

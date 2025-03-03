@@ -32,8 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 .java-version
-mvnw
-mvnw.cmd
-.mvn/wrapper/maven-wrapper.properties
+.gradle/
 
 logs/

@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault
 import com.example.betgame.data.BetTransactionDTO
 import com.example.betgame.data.BetTransactionCreateDTO
 import com.example.betgame.data.UserReadDTO
+import com.example.betgame.data.LeaderboardDTO
 import com.example.betgame.service.BetGameSrv
 import jakarta.validation.Valid
 
@@ -43,4 +44,12 @@ class BetGameAPI @Autowired constructor(
      */
     @GetMapping("/me")
     fun me(): UserReadDTO = betGameSrv.me()
+
+    /**
+     * API Endpoint that returns the players leaderboard
+     * 
+     * @return a list of DTO containing the leaderboard data
+     */
+    @GetMapping("/leaderboard")
+    fun leaderboard(): List<LeaderboardDTO> = betGameSrv.leaderboard()
 }

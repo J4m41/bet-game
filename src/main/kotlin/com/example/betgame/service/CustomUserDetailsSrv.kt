@@ -20,7 +20,8 @@ class CustomUserDetailsSrv : UserDetailsService {
     }
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByUsername(username)
+        val user = userRepository.findOne(Q_U.username.eq(username))
+            .orElseThrow { UsernameNotFoundException("User not found with username: $username") }
         return user
     }
 }

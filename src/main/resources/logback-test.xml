@@ -14,12 +14,12 @@
     </appender>
 
     <!-- LOG everything at INFO level -->
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="Console" />
     </root>
 
     <!-- LOG "com.example.betgame*" at TRACE level -->
-    <logger name="com.example.betgame" level="info" additivity="false">
+    <logger name="com.example.betgame" level="INFO" additivity="false">
         <appender-ref ref="Console" />
     </logger>
 

@@ -35,15 +35,14 @@ class JwtSrv {
 
     fun getExpirationTime(): Long = jwtExpiration
 
-    private fun buildToken(extraClaims: Map<String, Any>, userDetails: UserDetails, expiration: Long): String {
-        return Jwts.builder()
+    private fun buildToken(extraClaims: Map<String, Any>, userDetails: UserDetails, expiration: Long): String = 
+        Jwts.builder()
             .setClaims(extraClaims)
             .setSubject(userDetails.username)
             .setIssuedAt(Date(System.currentTimeMillis()))
             .setExpiration(Date(System.currentTimeMillis() + expiration))
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact()
-    }
 
     fun isTokenValid(token: String, userDetails: UserDetails): Boolean {
         val username = extractUsername(token)

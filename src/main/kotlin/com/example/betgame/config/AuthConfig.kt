@@ -2,7 +2,6 @@ package com.example.betgame.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Lazy
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
@@ -15,9 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.web.cors.CorsConfiguration
 import org.springframework.beans.factory.annotation.Autowired
-import java.util.Arrays
 import com.example.betgame.security.JwtAuthenticationFilter
 import com.example.betgame.service.CustomUserDetailsSrv
 
@@ -33,15 +30,8 @@ class AuthConfig {
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        val configuration = CorsConfiguration().apply {
-            allowedOrigins = listOf("*")
-            allowedMethods = listOf("*")
-            allowedHeaders = listOf("*")
-            exposedHeaders = listOf("*")
-        }
 
         return http
-            .cors { it.configurationSource { configuration } }
             .authorizeHttpRequests {
                 it.requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()

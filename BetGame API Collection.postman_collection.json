@@ -4,7 +4,7 @@
 		"name": "BetGame API Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "5718651",
-		"_collection_link": "https://jamal-95.postman.co/workspace/dc30e31f-bc52-44a7-b0fe-cde74c6b2f10/collection/5718651-b6f759bc-f498-4246-8231-b349c53b825a?action=share&source=collection_link&creator=5718651"
+		"_collection_link": "https://jamal-95.postman.co/workspace/JAMAL~dc30e31f-bc52-44a7-b0fe-cde74c6b2f10/collection/5718651-b6f759bc-f498-4246-8231-b349c53b825a?action=share&source=collection_link&creator=5718651"
 	},
 	"item": [
 		{
@@ -180,6 +180,36 @@
 					"path": [
 						"api",
 						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Leaderboard",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{auth_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/leaderboard",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"leaderboard"
 					]
 				}
 			},

@@ -4,7 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Max
 
-data class UserReadDTO(val username: String, val firstName: String, val lastName: String, val walletBalance: Long)
+data class UserReadDTO(
+    val username: String, 
+    val firstName: String, 
+    val lastName: String, 
+    val walletBalance: Double
+)
 
 fun BetUser.toReadDTO(): UserReadDTO = UserReadDTO(
     username = this.username, 
@@ -25,8 +30,7 @@ data class UserLoginDTO(
 )
 
 data class AuthTokenDTO(
-    val token: String,
-    val expiresIn: Long?
+    val token: String
 )
 
 data class ExceptionDTO(
@@ -36,16 +40,22 @@ data class ExceptionDTO(
 )
 
 data class BetTransactionDTO(
-    var betAmount: Long,
+    var betAmount: Double,
     var betNumber: Int,
     var betResult: BetResult,
     var betResultNumber: Int,
-    var winAmount: Long
+    var winAmount: Double
 )
 
 fun BetTransaction.toDTO(): BetTransactionDTO = BetTransactionDTO(this.betAmount, this.betNumber, this.betResult, this.betResultNumber, this.winAmount)
 
 data class BetTransactionCreateDTO(
-    @field:Min(1) var betAmount: Long,
+    @field:Min(1) var betAmount: Double,
     @field:Min(1) @field:Max(10) var betNumber: Int,
+)
+
+data class LeaderboardDTO(
+    val username: String?,
+    val totalWins: Long?,
+    val totalWinsAmount: Double?
 )
